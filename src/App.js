@@ -1,28 +1,46 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
 import './App.css';
+import Quote from './Quote';
 
 class App extends Component {
-  render() {
-    return (
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Edit <code>src/App.js</code> and save to reload.
-          </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-        </header>
-      </div>
-    );
-  }
+	constructor(props) {
+		super(props);
+		this.state = {
+			quote: 'QuoteTest',
+			character: 'CharTest',
+			image: 'ImageTest'
+		};
+		this.handleClick = this.handleClick.bind(this);
+	}
+
+	getQuote() {
+		fetch('https://thesimpsonsquoteapi.glitch.me/quotes')
+			.then(response => response.json())
+			.then(data => {
+				this.setState({
+					quote: data[0].quote,
+					character: data[0].character,
+					image: data[0].image
+				});
+			});
+	}
+
+	componentDidMount() {
+		this.getQuote();
+	}
+
+	handleClick() {
+		this.getQuote();
+	}
+
+	render() {
+		return (
+			<div>
+				<button onClick={this.handleClick}>Another Quote</button>
+				<Quote props={this.state} />
+			</div>
+		);
+	}
 }
 
 export default App;
